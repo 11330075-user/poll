@@ -29,3 +29,34 @@ class PollCreate(CreateView):
     fields = ['subject']    # 指定要顯示的欄位
     success_url = '/poll/'  # 成功新增後要導向的路徑
     template_name = 'general_form.html' # 要使用的頁面範本
+## 修改投票主題
+class PollUpdate(UpdateView):
+    model = Poll
+    fields = ['subject']        # 指定要顯示的欄位
+    success_url = '/poll/'      # 成功新增後要導向的路徑
+    template_name = 'general_form.html' # 要使用的頁面範本
+## 刪除投票主題
+class PollDelete(DeleteView):
+    model = Poll
+    success_url = '/poll/'
+    template_name = "confirm_delete.html"
+## 新增投票選項
+class OptionCreate(CreateView):
+    model = Option
+    fields = ['title']
+    template_name = 'general_form.html'
+    # 成功新增選項後要導向其所屬的投票主題檢視頁面
+    def get_success_url(self):
+        return '/poll/'+str(self.kwargs['pid'])+'/'
+    # 表單驗證，在此填上選項所屬的投票主題 id
+    def form_valid(self, form):
+        form.instance.poll_id = self.kwargs['pid']
+        return super().form_valid(form)
+## 修改投票選項
+class OptionUpdate(UpdateView):
+    model = Option
+    fields = ['title']
+    template_name = 'general_form.html'
+    # 修改成功後返回其所屬投票主題檢視頁面
+    def get_success_url(self):
+        return '/poll/'+str(self.object.poll_id)+'/'
