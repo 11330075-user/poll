@@ -5,5 +5,6 @@ urlpatterns = [
     path('poll/', views.PollList.as_view(),name='poll_list'),
     path('poll/<int:pk>/', views.PollDetail.as_view()),
     path('option/<int:pk>/', views.PollVote.as_view()),
+    path('poll/create/', views.PollCreate.as_view()),
     path('', RedirectView.as_view(url=reverse_lazy('poll_list')))
 ]
