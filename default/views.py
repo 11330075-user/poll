@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView, RedirectView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import *
-
+from django.urls import reverse
 ## Create your views here.
 ## 投票主題列表
 class PollList(ListView):
@@ -60,3 +60,10 @@ class OptionUpdate(UpdateView):
     # 修改成功後返回其所屬投票主題檢視頁面
     def get_success_url(self):
         return '/poll/'+str(self.object.poll_id)+'/'
+## 刪除投票選項
+class OptionDelete(DeleteView):
+    model = Option
+    template_name = 'confirm_delete.html'
+    # 刪除成功後返回其所屬投票主題檢視頁面
+    def get_success_url(self):
+        return reverse('poll_view', kwargs={'pk': self.object.poll_id})
